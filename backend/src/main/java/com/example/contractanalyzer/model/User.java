@@ -8,7 +8,7 @@ import lombok.Data;
 import java.util.Set;
 
 @Entity
-@Table(name = "app_user")          // ←  add this line
+@Table(name = "app_user")  
 @Data
 public class User {
 
