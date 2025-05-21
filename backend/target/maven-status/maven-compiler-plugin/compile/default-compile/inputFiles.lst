@@ -1,2 +1,13 @@
-C:\Users\ASUS\Desktop\smart-contract-analyzer\backend\src\main\java\com\example\contractanalyzer\ContractAnalyzerApplication.java
+C:\Users\ASUS\Desktop\smart-contract-analyzer\backend\src\main\java\com\example\contractanalyzer\security\JwtService.java
+C:\Users\ASUS\Desktop\smart-contract-analyzer\backend\src\main\java\com\example\contractanalyzer\security\JwtAuthenticationFilter.java
+C:\Users\ASUS\Desktop\smart-contract-analyzer\backend\src\main\java\com\example\contractanalyzer\security\Role.java
 C:\Users\ASUS\Desktop\smart-contract-analyzer\backend\src\main\java\com\example\contractanalyzer\HealthController.java
+C:\Users\ASUS\Desktop\smart-contract-analyzer\backend\src\main\java\com\example\contractanalyzer\security\SecurityConfig.java
+C:\Users\ASUS\Desktop\smart-contract-analyzer\backend\src\main\java\com\example\contractanalyzer\ContractAnalyzerApplication.java
+C:\Users\ASUS\Desktop\smart-contract-analyzer\backend\src\main\java\com\example\contractanalyzer\repository\UserRepository.java
+C:\Users\ASUS\Desktop\smart-contract-analyzer\backend\src\main\java\com\example\contractanalyzer\model\User.java
+C:\Users\ASUS\Desktop\smart-contract-analyzer\backend\src\main\java\com\example\contractanalyzer\auth\AuthController.java
+C:\Users\ASUS\Desktop\smart-contract-analyzer\backend\src\main\java\com\example\contractanalyzer\auth\AuthRequest.java
+C:\Users\ASUS\Desktop\smart-contract-analyzer\backend\src\main\java\com\example\contractanalyzer\auth\AuthResponse.java
+C:\Users\ASUS\Desktop\smart-contract-analyzer\backend\src\main\java\com\example\contractanalyzer\service\UserService.java
+C:\Users\ASUS\Desktop\smart-contract-analyzer\backend\src\main\java\com\example\contractanalyzer\auth\RegisterRequest.java
