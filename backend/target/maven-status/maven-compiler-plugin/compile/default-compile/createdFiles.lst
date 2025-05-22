@@ -7,7 +7,14 @@ com\example\contractanalyzer\security\Role.class
 com\example\contractanalyzer\model\User.class
 com\example\contractanalyzer\security\SecurityConfig.class
 com\example\contractanalyzer\auth\AuthResponse.class
+com\example\contractanalyzer\repository\ContractRepository.class
+com\example\contractanalyzer\service\ContractServiceImpl.class
+com\example\contractanalyzer\api\ContractController.class
+com\example\contractanalyzer\service\ContractService.class
 com\example\contractanalyzer\service\UserService.class
+com\example\contractanalyzer\auth\LoginRequest.class
 com\example\contractanalyzer\security\JwtAuthenticationFilter.class
 com\example\contractanalyzer\auth\AuthRequest.class
 com\example\contractanalyzer\security\JwtService.class
+com\example\contractanalyzer\dto\ContractDto.class
+com\example\contractanalyzer\model\Contract.class

@@ -7,8 +7,6 @@ import com.example.contractanalyzer.security.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -56,12 +54,13 @@ public class UserService {
      * @return the authenticated User (principal)
      * @throws BadCredentialsException if authentication fails
      */
-    public User authenticate(String username, String password) {
-        // explicit types instead of var
-        UsernamePasswordAuthenticationToken authToken =
-            new UsernamePasswordAuthenticationToken(username, password);
+    public User authenticate(String username, String rawPassword) {
+        User user = userRepo.findByUsername(username)
+                            .orElseThrow(() -> new BadCredentialsException("user not found"));
 
-        Authentication auth = authManager.authenticate(authToken);
-        return (User) auth.getPrincipal();
+        if (!passwordEncoder.matches(rawPassword, user.getPassword())) {
+            throw new BadCredentialsException("bad password");
+        }
+        return user;
     }
 }

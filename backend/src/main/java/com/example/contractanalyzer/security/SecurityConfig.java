@@ -6,12 +6,14 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
 
 @Configuration
 @EnableMethodSecurity
@@ -24,47 +26,49 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity http,
+            HandlerMappingIntrospector introspector
+    ) throws Exception {
+        // build MVC matchers that understand Spring MVC path patterns
+        MvcRequestMatcher.Builder mvc = new MvcRequestMatcher.Builder(introspector);
+
         http
-          // 1) Disable CSRF
-          .csrf(AbstractHttpConfigurer::disable)
+            .csrf(csrf -> csrf.disable())
+            .headers(headers -> headers.frameOptions(frame -> frame.disable()))
 
-          // 2) Allow frames (H2 console)
-          .headers(headers -> headers.frameOptions().disable())
+            .authorizeHttpRequests(auth -> auth
+                // public MVC endpoints
+                .requestMatchers(mvc.pattern("/auth/register")).permitAll()
+                .requestMatchers(mvc.pattern("/auth/login")).permitAll()
+                .requestMatchers(mvc.pattern("/health")).permitAll()
+                .requestMatchers(mvc.pattern("/h2-console/**")).permitAll()
 
-          // 3) Authorize requests explicitly via AntPathRequestMatcher
-          .authorizeHttpRequests(auth -> {
-              auth
-                .requestMatchers(new AntPathRequestMatcher("/auth/register", "POST"))
-                  .permitAll();
-              auth
-                .requestMatchers(new AntPathRequestMatcher("/auth/login",    "POST"))
-                  .permitAll();
-              auth
-                .requestMatchers(new AntPathRequestMatcher("/health",        "GET"),
-                                 new AntPathRequestMatcher("/h2-console/**", "GET"))
-                  .permitAll();
-              auth
-                .anyRequest()
-                  .authenticated();
-          })
+                // example of a static resource, non‐MVC
+                .requestMatchers(new AntPathRequestMatcher("/static/**")).permitAll()
 
-          // 4) Stateless session
-          .sessionManagement(sm -> sm.disable())
+                // everything else requires auth
+                .anyRequest().authenticated()
+            )
 
-          // 5) JWT filter
-          .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+            .sessionManagement(sm ->
+                sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            )
+            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
+    // --------------------------------------------------------------------
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public AuthenticationManager authManager(AuthenticationConfiguration cfg) throws Exception {
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration cfg
+    ) throws Exception {
         return cfg.getAuthenticationManager();
     }
 }
